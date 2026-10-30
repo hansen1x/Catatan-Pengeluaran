@@ -77,6 +77,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 svg.i{width:1.1em;height:1.1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.18em}
 .dw{position:relative;flex:1;text-align:center;font-weight:700;font-size:15px;padding:10px 4px}
 .dw input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.sbx{border-top:1px solid rgba(255,255,255,.35);margin-top:10px;padding-top:8px}
+.sbv{font-size:20px;font-weight:700;line-height:1.2;letter-spacing:-.5px}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -87,7 +89,7 @@ svg.i{width:1.1em;height:1.1em;fill:none;stroke:currentColor;stroke-width:1.8;st
   <div style="text-align:center;margin:-6px 0 10px"><button id="td" hidden style="background:none;border:0;color:var(--ac);font-weight:700;font-size:13px">↩ Kembali ke hari ini</button></div>
   <div class="hero" id="hero">
     <div class="ring"><svg width="104" height="104" viewBox="0 0 104 104"><circle cx="52" cy="52" r="44" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="10"/><circle id="rc" cx="52" cy="52" r="44" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="276.5" style="transition:stroke-dashoffset .5s"/></svg><b id="pc">0%</b></div>
-    <div><small>Total keluar</small><div class="big" id="tot">Rp0</div><div class="msg" id="msg"></div></div>
+    <div><small>Total keluar</small><div class="big" id="tot">Rp0</div><div class="msg" id="msg"></div><div class="sbx"><small>SISA BUDGET BULAN INI</small><div class="sbv" id="sb">Rp0</div></div></div>
   </div>
   <div class="card" id="fc">
     <div class="fr"><input class="in" id="n" placeholder="Barang" autocomplete="off"><input class="in" id="a" placeholder="Harga" inputmode="decimal" autocomplete="off"></div>
@@ -173,7 +175,7 @@ function render(){
  h.className='hero'+(p>1?' bad':p>.8?' wr':'');
  $('rc').style.strokeDashoffset=276.5*(1-Math.min(1,p));$('pc').textContent=Math.round(p*100)+'%';
  $('msg').textContent=!tot?'Belum ada pengeluaran':p>1?'Lewat jatah '+rp(tot-S.limit):p>.8?'Hati-hati, sisa '+rp(S.limit-tot):'Aman, sisa '+rp(S.limit-tot);
- $('cnt').textContent=day.length?day.length+' catatan':'';
+ const mk=k.slice(0,7),SB=S.limit*new Date(cur.getFullYear(),cur.getMonth()+1,0).getDate()-sumOf(i=>i.d.startsWith(mk));$('sb').textContent=(SB<0?'-':'')+rp(Math.abs(SB));$('cnt').textContent=day.length?day.length+' catatan':'';
  $('ls').innerHTML=day.length?day.slice().reverse().map(i=>{const[c,col]=CATS[i.c]||CATS['Lain-lain'];return`<div class="it${i.id===editId?' ed':''}"><div class="ic" style="--c:${col}">${c}</div><div class="nm"><div>${esc(i.n)}</div><span>${i.c}</span></div><b>${rp(i.a)}</b><button class="sm" data-e="${i.id}" aria-label="Edit">✎</button><button class="sm" data-x="${i.id}" aria-label="Hapus">✕</button></div>`}).join(''):'<div class="empty">Belum ada catatan hari ini</div>';
  chips();summary()}
 function summary(){
